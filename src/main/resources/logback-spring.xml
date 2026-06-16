@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  logback-spring.xml — FleetOps Auth Service
+  JSON structured logging for AWS CloudWatch Logs Insights.
+
+  Local dev:  pretty console output via Spring default
+  Production: JSON Lines format — one log event per line.
+              CloudWatch Logs Insights can then query by field:
+              fields @timestamp, service, level, message, traceId
+-->
+<configuration>
+
+    <!-- Active when running inside Docker / ECS / EC2 (spring.profiles.active=prod) -->
+    <springProfile name="prod">
+        <appender name="JSON_STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <pattern>{"timestamp":"%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ}","level":"%level","service":"auth-service","thread":"%thread","logger":"%logger{36}","message":"%message","exception":"%ex{short}"}%n</pattern>
+            </encoder>
+        </appender>
+        <root level="INFO">
+            <appender-ref ref="JSON_STDOUT"/>
+        </root>
+        <logger name="com.fleetops" level="INFO"/>
+    </springProfile>
+
+    <!-- Active during local development (default profile) -->
+    <springProfile name="!prod">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%cyan(%d{HH:mm:ss}) %highlight(%-5level) %yellow([auth-service]) %logger{36} - %msg%n</pattern>
+            </encoder>
+        </appender>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+        <logger name="com.fleetops" level="DEBUG"/>
+    </springProfile>
+
+</configuration>

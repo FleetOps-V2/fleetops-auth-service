@@ -10,7 +10,7 @@ spring:
       initialization-fail-timeout: 60000
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: false
     open-in-view: false
     properties:
@@ -18,20 +18,31 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
 jwt:
-  secret: ${JWT_SECRET:dfsfjsdfkjsdfksdfksdfksdfsdfsdfksdfksdfksdfsdfsfdsdf}
+  # JWT_SECRET MUST be injected via environment variable (Secrets Manager in AWS).
+  # No fallback — service will refuse to start if the secret is missing.
+  secret: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION:86400000}
 
+# FIX #9: CORS — defaults to localhost:8080 (docker-compose sets this per environment)
 cors:
-  allowed-origins: ${CORS_ALLOWED_ORIGINS:*}
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:8080}
 
 management:
   endpoints:
     web:
       exposure:
-        include: health
+        # FIX #13: expose health + info for build metadata visibility
+        include: health,info
   endpoint:
     health:
       show-details: when_authorized
+    info:
+      enabled: true
+  info:
+    env:
+      enabled: true
+    build:
+      enabled: true
 
 logging:
   level:

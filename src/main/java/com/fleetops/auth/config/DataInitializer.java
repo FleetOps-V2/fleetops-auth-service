@@ -37,6 +37,7 @@ public class DataInitializer {
     @Value("${SEED_DRIVER_PASSWORD:Driver@123}")
     private String driverPassword;
 
+
     @Bean
     public CommandLineRunner seedDefaultUsers(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         return args -> {

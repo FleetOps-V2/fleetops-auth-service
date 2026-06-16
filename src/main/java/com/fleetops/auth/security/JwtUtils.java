@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import jakarta.annotation.PostConstruct;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -22,6 +23,16 @@ public class JwtUtils {
 
     @Value("${jwt.expiration}")
     private long jwtExpirationMs;
+
+    @PostConstruct
+    public void validateSecretKey() {
+        if (jwtSecret == null || jwtSecret.getBytes(StandardCharsets.UTF_8).length < 32) {
+            throw new IllegalArgumentException(
+                "FATAL: JWT Secret Key must be at least 256 bits (32 characters/bytes) long for HSM-HMAC-SHA compliance. Current length: " + 
+                (jwtSecret == null ? 0 : jwtSecret.getBytes(StandardCharsets.UTF_8).length)
+            );
+        }
+    }
 
     private SecretKey getSigningKey() {
         byte[] keyBytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
