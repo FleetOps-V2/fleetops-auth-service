@@ -10,6 +10,11 @@ concurrency:
   group: auth-service-ci-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: write
+  security-events: write
+  id-token: write
+
 jobs:
   ci:
     uses: FleetOps-V2/fleetops-github-workflows/.github/workflows/java-ci-ecr.yml@main
