@@ -1,6 +1,5 @@
 package com.fleetops.auth.security;
 
-import com.fleetops.auth.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
