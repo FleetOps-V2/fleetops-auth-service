@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -70,7 +72,12 @@ public class AuthController {
         if (authentication == null) {
             return ResponseEntity.status(401).body("Unauthorized");
         }
-        return ResponseEntity.ok(authentication.getName());
+        User user = userRepository.findByUsername(authentication.getName()).orElseThrow();
+        return ResponseEntity.ok(Map.of(
+            "username", user.getUsername(),
+            "email",    user.getEmail(),
+            "role",     user.getRole().name()
+        ));
     }
 }
 
