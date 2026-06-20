@@ -22,6 +22,11 @@ jwt:
   # No fallback — service will refuse to start if the secret is missing.
   secret: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION:86400000}
+  cookie-secure: ${JWT_COOKIE_SECURE:true}
+
+# LAMBDA_SERVICE_PASSWORD — sourced from Secrets Manager fleetops/{env}/lambda-service-credentials.
+# LambdaServiceInitializer reads this at startup to seed/refresh the lambda-service account.
+# Falls back to a local-dev default when the env var is absent.
 
 # FIX #9: CORS — defaults to localhost:8080 (docker-compose sets this per environment)
 cors:
@@ -30,6 +35,7 @@ cors:
 management:
   endpoints:
     web:
+      base-path: /
       exposure:
         # FIX #13: expose health + info for build metadata visibility
         include: health,info
