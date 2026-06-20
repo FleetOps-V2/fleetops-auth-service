@@ -35,9 +35,7 @@ cors:
 management:
   endpoints:
     web:
-      base-path: /
       exposure:
-        # FIX #13: expose health + info for build metadata visibility
         include: health,info
   endpoint:
     health:
