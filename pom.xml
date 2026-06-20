@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.5</version>
+		<version>3.5.14</version>
 		<relativePath/>
 	</parent>
 	<groupId>com.fleetops</groupId>
@@ -20,6 +20,7 @@
 		<tomcat.version>10.1.55</tomcat.version>
 		<postgresql.version>42.7.11</postgresql.version>
 		<jackson-bom.version>2.21.2</jackson-bom.version>
+		<spring-security.version>6.5.9</spring-security.version>
 		<!-- SonarQube: skip coverage enforcement (no JaCoCo configured) -->
 		<sonar.coverage.exclusions>**/*</sonar.coverage.exclusions>
 	</properties>
