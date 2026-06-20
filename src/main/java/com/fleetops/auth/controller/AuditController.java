@@ -22,13 +22,18 @@ public class AuditController {
         // Override user with authenticated principal — never trust client-supplied username
         event.put("user", auth != null ? auth.getName() : "anonymous");
         log.info("[AUDIT] action={} resource={} user={} eventId={} service={} success={} detail={}",
-            event.get("action"),
-            event.get("resource"),
-            event.get("user"),
-            event.get("eventId"),
-            event.get("service"),
-            event.get("success"),
-            event.get("detail"));
+            sanitize(event.get("action")),
+            sanitize(event.get("resource")),
+            sanitize(event.get("user")),
+            sanitize(event.get("eventId")),
+            sanitize(event.get("service")),
+            sanitize(event.get("success")),
+            sanitize(event.get("detail")));
         return ResponseEntity.accepted().build();
+    }
+
+    private static String sanitize(Object value) {
+        if (value == null) return "null";
+        return value.toString().replaceAll("[\r\n\t]", "_");
     }
 }
