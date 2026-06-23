@@ -78,7 +78,7 @@ class AuthControllerTest {
     }
 
     @Test
-    void login_doesNotReturnTokenInBody() {
+    void login_returnsTokenInBody() {
         UserDetails userDetails = mock(UserDetails.class);
         when(userDetails.getUsername()).thenReturn("driver1");
         Authentication auth = mock(Authentication.class);
@@ -100,10 +100,9 @@ class AuthControllerTest {
 
         AuthResponse body = (AuthResponse) result.getBody();
         assertNotNull(body);
-        // AuthResponse must NOT expose the raw token
-        assertNull(body.getClass().getFields().length > 0 ? null : null);
         assertEquals("driver1", body.getUsername());
         assertEquals("DRIVER", body.getRole());
+        assertEquals("some-token", body.getToken());
     }
 
     @Test

@@ -86,7 +86,7 @@ public class AuthController {
                 .build();
         response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
-        return ResponseEntity.ok(new AuthResponse(user.getUsername(), user.getRole().name()));
+        return ResponseEntity.ok(new AuthResponse(user.getUsername(), user.getRole().name(), jwt));
     }
 
     @PostMapping("/logout")
